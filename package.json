@@ -1,7 +1,7 @@
 {
   "name": "pwa-complete-guide",
   "version": "1.0.0",
-  "description": "Simple PWA, Building a simple Instagram clone.",
+  "description": "A complete guide to PWAs. Building a simple Instagram clone.",
   "main": "index.js",
   "scripts": {
     "start": "http-server -c-1"
@@ -14,9 +14,9 @@
     "complete",
     "tutorial"
   ],
-  "author": "Sujith",
+  "author": "Sujith Gopinath",
   "license": "ISC",
   "devDependencies": {
-    "http-server": "^0.9.0"
+    "http-server": "^0.10.0"
   }
 }

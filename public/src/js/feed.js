@@ -1,8 +1,6 @@
 var shareImageButton = document.querySelector('#share-image-button');
 var createPostArea = document.querySelector('#create-post');
-var closeCreatePostModalButton = document.querySelector(
-  '#close-create-post-modal-btn'
-);
+var closeCreatePostModalButton = document.querySelector('#close-create-post-modal-btn');
 var sharedMomentsArea = document.querySelector('#shared-moments');
 
 function openCreatePostModal() {
@@ -10,7 +8,7 @@ function openCreatePostModal() {
   if (deferredPrompt) {
     deferredPrompt.prompt();
 
-    deferredPrompt.userChoice.then(function (choiceResult) {
+    deferredPrompt.userChoice.then(function(choiceResult) {
       console.log(choiceResult.outcome);
 
       if (choiceResult.outcome === 'dismissed') {
@@ -55,9 +53,9 @@ function createCard() {
 }
 
 fetch('https://httpbin.org/get')
-  .then(function (res) {
+  .then(function(res) {
     return res.json();
   })
-  .then(function (data) {
+  .then(function(data) {
     createCard();
   });
