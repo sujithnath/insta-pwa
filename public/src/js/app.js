@@ -1,4 +1,3 @@
-
 var deferredPrompt;
 
 if (!window.Promise) {
@@ -11,12 +10,12 @@ if ('serviceWorker' in navigator) {
     .then(function () {
       console.log('Service worker registered!');
     })
-    .catch(function(err) {
+    .catch(function (err) {
       console.log(err);
     });
 }
 
-window.addEventListener('beforeinstallprompt', function(event) {
+window.addEventListener('beforeinstallprompt', function (event) {
   console.log('beforeinstallprompt fired');
   event.preventDefault();
   deferredPrompt = event;

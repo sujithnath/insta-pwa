@@ -4,61 +4,62 @@
  * Released under the MIT license
  * github.com/Octane/setImmediate
  */
-window.setImmediate || function () {'use strict';
+window.setImmediate ||
+  (function () {
+    'use strict';
 
-  var uid = 0;
-  var storage = {};
-  var firstCall = true;
-  var slice = Array.prototype.slice;
-  var message = 'setImmediatePolyfillMessage';
+    var uid = 0;
+    var storage = {};
+    var firstCall = true;
+    var slice = Array.prototype.slice;
+    var message = 'setImmediatePolyfillMessage';
 
-  function fastApply(args) {
-    var func = args[0];
-    switch (args.length) {
-      case 1:
-        return func();
-      case 2:
-        return func(args[1]);
-      case 3:
-        return func(args[1], args[2]);
+    function fastApply(args) {
+      var func = args[0];
+      switch (args.length) {
+        case 1:
+          return func();
+        case 2:
+          return func(args[1]);
+        case 3:
+          return func(args[1], args[2]);
+      }
+      return func.apply(window, slice.call(args, 1));
     }
-    return func.apply(window, slice.call(args, 1));
-  }
 
-  function callback(event) {
-    var key = event.data;
-    var data;
-    if (typeof key == 'string' && key.indexOf(message) == 0) {
-      data = storage[key];
-      if (data) {
-        delete storage[key];
-        fastApply(data);
+    function callback(event) {
+      var key = event.data;
+      var data;
+      if (typeof key == 'string' && key.indexOf(message) == 0) {
+        data = storage[key];
+        if (data) {
+          delete storage[key];
+          fastApply(data);
+        }
       }
     }
-  }
 
-  window.setImmediate = function setImmediate() {
-    var id = uid++;
-    var key = message + id;
-    var i = arguments.length;
-    var args = new Array(i);
-    while (i--) {
-      args[i] = arguments[i];
-    }
-    storage[key] = args;
-    if (firstCall) {
-      firstCall = false;
-      window.addEventListener('message', callback);
-    }
-    window.postMessage(key, '*');
-    return id;
-  };
+    window.setImmediate = function setImmediate() {
+      var id = uid++;
+      var key = message + id;
+      var i = arguments.length;
+      var args = new Array(i);
+      while (i--) {
+        args[i] = arguments[i];
+      }
+      storage[key] = args;
+      if (firstCall) {
+        firstCall = false;
+        window.addEventListener('message', callback);
+      }
+      window.postMessage(key, '*');
+      return id;
+    };
 
-  window.clearImmediate = function clearImmediate(id) {
-    delete storage[message + id];
-  };
-
-}();
+    window.clearImmediate = function clearImmediate(id) {
+      delete storage[message + id];
+    };
+  })();
 
 /**
  * Promise polyfill v1.0.10
@@ -68,7 +69,8 @@ window.setImmediate || function () {'use strict';
  * Released under the MIT license
  * github.com/Octane/Promise
  */
-(function (global) {'use strict';
+(function (global) {
+  'use strict';
 
   var STATUS = '[[PromiseStatus]]';
   var VALUE = '[[PromiseValue]]';
@@ -84,7 +86,9 @@ window.setImmediate || function () {'use strict';
   var CHAINING_CYCLE = 'then() cannot return same Promise that it resolves.';
 
   var setImmediate = global.setImmediate || require('timers').setImmediate;
-  var isArray = Array.isArray || function (anything) {
+  var isArray =
+    Array.isArray ||
+    function (anything) {
       return Object.prototype.toString.call(anything) == '[object Array]';
     };
 
@@ -155,7 +159,7 @@ window.setImmediate || function () {'use strict';
     if (isPromise(anything)) {
       return anything;
     }
-    if(isObject(anything)) {
+    if (isObject(anything)) {
       try {
         then = anything.then;
       } catch (error) {
@@ -189,7 +193,7 @@ window.setImmediate || function () {'use strict';
     }
     try {
       resolver(resolve, reject);
-    } catch(error) {
+    } catch (error) {
       reject(error);
     }
   }
@@ -336,7 +340,7 @@ window.setImmediate || function () {'use strict';
           if (isPromise(anything)) {
             promiseCount++;
             anything.then(
-              function (index) {
+              (function (index) {
                 return function (value) {
                   values[index] = value;
                   fulfilledCount++;
@@ -344,7 +348,7 @@ window.setImmediate || function () {'use strict';
                     resolve(values);
                   }
                 };
-              }(i),
+              })(i),
               reject
             );
           } else if (isInternalError(anything)) {
@@ -368,5 +372,4 @@ window.setImmediate || function () {'use strict';
   } else if (!global.Promise) {
     global.Promise = Promise;
   }
-
-}(this));
+})(this);
